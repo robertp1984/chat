@@ -1,0 +1,38 @@
+# Makes the application available under URL: https://localhost/chat and https://chat.127.0.0.1.nip.io
+# Remember to use minikube tunnel if running on Windows
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  namespace: chat
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+        - localhost
+        - chat.127.0.0.1.nip.io
+      secretName: ingress-tls
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /chat(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: chat
+                port:
+                  number: 8080
+    - host: chat.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chat
+                port:
+                  number: 8080
