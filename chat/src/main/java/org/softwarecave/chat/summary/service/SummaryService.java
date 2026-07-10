@@ -56,6 +56,7 @@ public class SummaryService {
         return saveSummary(text, textSummary);
     }
 
+    @Transactional
     public Summary saveSummary(String text, String textSummary) {
         return summaryRepository.save(new Summary(text, textSummary));
     }

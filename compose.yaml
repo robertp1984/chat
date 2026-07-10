@@ -41,7 +41,35 @@ services:
       - REDIS_ARGS=--requirepass redispwd --appendonly yes
     restart: no
 
+  elasticsearch:
+    image: elasticsearch:9.4.3
+    hostname: elasticsearch
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      ELASTIC_PASSWORD: elastic
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - data-elasticsearch:/usr/share/elasticsearch/data
+
+
+  kibana:
+    image: kibana:9.4.3
+    hostname: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+#      - ELASTICSEARCH_USERNAME=kibana_system
+#      - ELASTICSEARCH_PASSWORD=REUruWHquzb=V2_DtWq_
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+    depends_on:
+      - elasticsearch
+
 
 volumes:
-  data-postgres:
+  data-postgresql:
   data-redis:
+  data-elasticsearch:
