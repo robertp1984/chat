@@ -1,7 +1,7 @@
 package org.softwarecave.chat.summary.service;
 
 import org.junit.jupiter.api.Test;
-import org.softwarecave.chat.summary.model.Summary;
+import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.utils.TestContainersConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +27,7 @@ public class SummaryServiceIT {
         String text = "This is a long message that needs to be summarized.";
         String summarizedTest = "Summarized message";
 
-        Summary summarizedMessage = summaryService.saveSummary(text,
-                summarizedTest);
+        Summary summarizedMessage = summaryService.saveSummary(new Summary(1L, text, summarizedTest));
 
         assertThat(summarizedMessage)
                 .isNotNull()

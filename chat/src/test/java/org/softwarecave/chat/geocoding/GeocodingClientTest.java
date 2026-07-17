@@ -1,6 +1,8 @@
 package org.softwarecave.chat.geocoding;
 
 import org.junit.jupiter.api.Test;
+import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
+import org.softwarecave.chat.geocoding.service.GeocodingClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
 import org.springframework.http.MediaType;

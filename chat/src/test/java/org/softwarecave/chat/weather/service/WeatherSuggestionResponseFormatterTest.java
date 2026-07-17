@@ -1,6 +1,7 @@
 package org.softwarecave.chat.weather.service;
 
 import org.junit.jupiter.api.Test;
+import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
 
 import java.util.Collections;
 import java.util.List;

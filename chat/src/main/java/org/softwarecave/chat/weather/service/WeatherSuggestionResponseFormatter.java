@@ -1,5 +1,7 @@
 package org.softwarecave.chat.weather.service;
 
+import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
+
 import java.util.stream.Collectors;
 
 public class WeatherSuggestionResponseFormatter {
