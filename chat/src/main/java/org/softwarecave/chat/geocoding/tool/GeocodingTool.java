@@ -1,6 +1,9 @@
-package org.softwarecave.chat.geocoding;
+package org.softwarecave.chat.geocoding.tool;
 
 import lombok.RequiredArgsConstructor;
+import org.softwarecave.chat.geocoding.domain.GeocodingException;
+import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
+import org.softwarecave.chat.geocoding.service.GeocodingClient;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;

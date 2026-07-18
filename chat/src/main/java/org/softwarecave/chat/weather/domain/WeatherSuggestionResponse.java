@@ -1,4 +1,4 @@
-package org.softwarecave.chat.weather.service;
+package org.softwarecave.chat.weather.domain;
 
 import java.io.Serializable;
 import java.util.List;

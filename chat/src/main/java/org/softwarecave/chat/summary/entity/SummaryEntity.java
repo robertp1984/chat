@@ -1,4 +1,4 @@
-package org.softwarecave.chat.summary.model;
+package org.softwarecave.chat.summary.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "summary")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Summary {
+public class SummaryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -32,7 +32,7 @@ public class Summary {
     @NotBlank
     private String textSummary;
 
-    public Summary(String text, String textSummary) {
+    public SummaryEntity(String text, String textSummary) {
         this(null, text, textSummary);
     }
 }

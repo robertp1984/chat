@@ -5,6 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.softwarecave.chat.geocoding.domain.GeocodingException;
+import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
+import org.softwarecave.chat.geocoding.service.GeocodingClient;
+import org.softwarecave.chat.geocoding.tool.GeocodingTool;
 
 import java.util.List;
 

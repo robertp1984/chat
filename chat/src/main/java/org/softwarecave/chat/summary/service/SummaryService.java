@@ -1,8 +1,9 @@
 package org.softwarecave.chat.summary.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.softwarecave.chat.summary.model.Summary;
 import org.softwarecave.chat.config.ChatOptionsFactory;
+import org.softwarecave.chat.summary.domain.Summary;
+import org.softwarecave.chat.summary.entity.SummaryEntity;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -53,12 +54,14 @@ public class SummaryService {
         var textSummary = getAISummary(text);
         log.info("The summarized text is {}", textSummary);
 
-        return saveSummary(text, textSummary);
+        return saveSummary(new Summary(null, text, textSummary));
     }
 
     @Transactional
-    public Summary saveSummary(String text, String textSummary) {
-        return summaryRepository.save(new Summary(text, textSummary));
+    public Summary saveSummary(Summary summary) {
+        var entityToSave = new SummaryEntity(summary.getText(), summary.getTextSummary());
+        var entity = summaryRepository.save(entityToSave);
+        return new Summary(entity.getId(), entity.getText(), entity.getTextSummary());
     }
 
     private String getAISummary(String msg) {

@@ -1,4 +1,4 @@
-package org.softwarecave.chat.geocoding;
+package org.softwarecave.chat.geocoding.domain;
 
 import java.io.Serializable;
 
