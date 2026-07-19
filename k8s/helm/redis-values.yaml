@@ -1,0 +1,14 @@
+auth:
+  enabled: true
+  existingSecret: secrets
+  existingSecretPasswordKey: redis-password
+
+architecture: replication
+
+replica:
+  replicaCount: 2
+
+persistence:
+  enabled: true
+  size: 1Gi
+  
