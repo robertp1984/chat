@@ -23,7 +23,7 @@ spec:
       containers:
       - name: chat
         image: robertp22/chat:0.0.1
-#        imagePullPolicy: Always
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "128Mi"
@@ -51,17 +51,24 @@ spec:
               secretKeyRef:
                 name: api-ninjas-api-key
                 key: API_NINJAS_API_KEY
+          - name: SPRING_DATA_REDIS_HOST
+            value: redis-master
+          - name: SPRING_DATA_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: redis-password
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 240
+          initialDelaySeconds: 120
           periodSeconds: 2
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 240
+          initialDelaySeconds: 120
           periodSeconds: 2
 
 ---

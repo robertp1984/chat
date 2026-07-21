@@ -1,4 +1,5 @@
-name: springboot-practice
+name: chat
+
 services:
   postgresql:
     image: postgres:18.0
