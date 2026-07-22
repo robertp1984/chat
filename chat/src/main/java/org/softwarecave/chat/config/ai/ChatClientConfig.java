@@ -1,7 +1,7 @@
-package org.softwarecave.chat.config;
+package org.softwarecave.chat.config.ai;
 
 import lombok.RequiredArgsConstructor;
-import org.softwarecave.chat.config.advisors.ValidatingAdvisor;
+import org.softwarecave.chat.config.ai.advisors.ValidatingAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;

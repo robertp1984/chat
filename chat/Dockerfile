@@ -20,4 +20,8 @@ COPY --from=builder /builder/extracted/spring-boot-loader/ ./
 COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
 COPY --from=builder /builder/extracted/application/ ./
 
-ENTRYPOINT ["java", "-jar", "chat.jar"]
+COPY src/main/resources/tls/truststore.jks ./tls/truststore.jks
+
+ENTRYPOINT ["java", \
+    "-Djavax.net.ssl.trustStore", "tls/truststore.jks", "-Djavax.net.ssl.trustStorePassword=", \
+    "-jar", "chat.jar"]
