@@ -28,6 +28,7 @@ services:
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - API_NINJAS_API_KEY=${API_NINJAS_API_KEY}
+      - SPRING_DATA_REDIS_HOST=redis
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=https://authserver:9000
     depends_on:
       - redis

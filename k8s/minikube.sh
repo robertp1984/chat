@@ -22,6 +22,9 @@ helm repo update
 # Redis using Helm
 helm install redis bitnami/redis -f helm/redis-values.yaml
 
+# OAuth2 authentication server
+kubectl apply -f authserver.yaml
+
 
 # Application Chat
 kubectl create secret generic openai-api-key --from-literal=OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -36,3 +39,6 @@ kubectl apply -f ingress.yaml
 
 # Minikube tunnel
 minikube tunnel
+
+# Port forwarding to OAuth2.0 authserver (for logging into the Chat application)
+kubectl port-forward svc/authserver 9000:9000

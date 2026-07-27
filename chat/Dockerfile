@@ -23,5 +23,6 @@ COPY --from=builder /builder/extracted/application/ ./
 COPY src/main/resources/tls/truststore.jks ./tls/truststore.jks
 
 ENTRYPOINT ["java", \
-    "-Djavax.net.ssl.trustStore", "tls/truststore.jks", "-Djavax.net.ssl.trustStorePassword=", \
+    "-Djavax.net.ssl.trustStore=/app/tls/truststore.jks", \
+    "-Djavax.net.ssl.trustStorePassword=", \
     "-jar", "chat.jar"]

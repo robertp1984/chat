@@ -2,6 +2,7 @@
 
 ### **Chat**
 A simple Spring Boot project that uses Spring AI framework for building a chat application with AI capabilities.
+The project includes OAuth2 authentication for security and requires external OAuth2 authorization server for user authentication and authorization.
 
 ## **How to run the projects**
 The applications can be run using IDE (IntelliJ IDEA) or by using the command line with Maven. 
@@ -10,6 +11,7 @@ The application requires:
 * OpenAI API key to be set as an environment variable OPENAI_API_KEY
 * API Ninjas API key to be set as an environment variable API_NINJAS_API_KEY
 * Redis server running on localhost:6379 (default port) for caching purposes in order to limit usage of completion tokens.
+* OAuth2 server running on localhost:9000 with TLS enabled for authentication purposes.
 
 There is a Docker `compose.yml` file provided for running the applications in Docker containers.
 There are also several Kubernetes deployment files provided for deploying the applications in a Kubernetes cluster.
@@ -23,6 +25,7 @@ There are also several Kubernetes deployment files provided for deploying the ap
 
 **Request:**
 - **Content-Type:** text/plain
+- **Authorization:** JWT
 - **Body:** Plain text message to be summarized
 
 **Response:**
@@ -33,6 +36,7 @@ There are also several Kubernetes deployment files provided for deploying the ap
 **Example:**
 ```bash
 curl -X POST http://localhost:8080/api/v1/summarization \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: text/plain" \
   -d "Your long text here..."
 ```
@@ -47,11 +51,13 @@ curl -X POST http://localhost:8080/api/v1/summarization \
 **Response:**
 - **Status:** 200 OK
 - **Content-Type:** text/event-stream
+- **Authorization:** JWT
 - **Body:** Stream of summary chunks
 
 **Example:**
 ```bash
 curl -X POST http://localhost:8080/api/v1/summarization/stream \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: text/plain" \
   -d "Your long text here..."
 ```
@@ -69,9 +75,11 @@ curl -X POST http://localhost:8080/api/v1/summarization/stream \
 **Response:**
 - **Status:** 200 OK
 - **Content-Type:** application/json
+- **Authorization:** JWT
 - **Body:** Formatted weather suggestion with clothing recommendations
 
 **Example:**
 ```bash
-curl "http://localhost:8080/api/v1/weatherSuggestion?latitude=40.7128&longitude=-74.0060"
+curl -X GET "http://localhost:8080/api/v1/weatherSuggestion?latitude=40.7128&longitude=-74.0060"
+   -H "Authorization: Bearer YOUR_JWT_TOKEN" 
 ```
