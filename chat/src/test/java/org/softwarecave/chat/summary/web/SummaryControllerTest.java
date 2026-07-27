@@ -54,6 +54,24 @@ class SummaryControllerTest {
     }
 
     @Test
+    void testSummarizeNoJWT() throws Exception {
+        // Arrange
+        String inputMessage = "This is a test message to summarize";
+        Summary expectedSummary = new Summary(1L, inputMessage, "Summary: Test message");
+
+        when(summaryService.summarize(inputMessage)).thenReturn(expectedSummary);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/summarization")
+                        .contentType(MediaType.TEXT_PLAIN_VALUE)
+                        .content(inputMessage))
+                .andExpect(status().isForbidden())
+                .andExpect(header().doesNotExist("Location"));
+
+        verify(summaryService, times(0)).summarize(inputMessage);
+    }
+
+    @Test
     void testSummarizeWithEmptyInput() throws Exception {
         // Arrange
         String inputMessage = "";

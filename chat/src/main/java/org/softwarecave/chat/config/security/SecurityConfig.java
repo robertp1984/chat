@@ -32,6 +32,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/summarization").hasAnyAuthority(Role.SUMMARY_ALL.getTitle())
 
                 // Weather
-                .requestMatchers("/api/v1/weatherSuggestion").hasAnyAuthority(Role.WEATHER_ALL.getTitle());
+                .requestMatchers("/api/v1/weatherSuggestion").hasAnyAuthority(Role.WEATHER_ALL.getTitle())
+
+                // Other
+                .anyRequest().denyAll();
     }
 }
