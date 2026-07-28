@@ -28,8 +28,11 @@ services:
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - API_NINJAS_API_KEY=${API_NINJAS_API_KEY}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=https://authserver:9000
     depends_on:
       - redis
+      - authserver
 
   redis:
     image: redis:8.8.0
@@ -40,6 +43,13 @@ services:
       - data-redis:/data
     environment:
       - REDIS_ARGS=--requirepass redispwd --appendonly yes
+    restart: no
+
+  authserver:
+    image: robertp22/authserver:0.0.1
+    hostname: authserver
+    ports:
+      - "9000:9000"
     restart: no
 
   elasticsearch:

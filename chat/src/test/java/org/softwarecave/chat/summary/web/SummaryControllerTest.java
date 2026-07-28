@@ -2,8 +2,10 @@ package org.softwarecave.chat.summary.web;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.softwarecave.chat.config.security.Role;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.service.SummaryService;
+import org.softwarecave.chat.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -41,6 +43,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isCreated())
@@ -48,6 +51,24 @@ class SummaryControllerTest {
                 .andExpect(header().exists("Location"));
 
         verify(summaryService, times(1)).summarize(inputMessage);
+    }
+
+    @Test
+    void testSummarizeNoJWT() throws Exception {
+        // Arrange
+        String inputMessage = "This is a test message to summarize";
+        Summary expectedSummary = new Summary(1L, inputMessage, "Summary: Test message");
+
+        when(summaryService.summarize(inputMessage)).thenReturn(expectedSummary);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/summarization")
+                        .contentType(MediaType.TEXT_PLAIN_VALUE)
+                        .content(inputMessage))
+                .andExpect(status().isForbidden())
+                .andExpect(header().doesNotExist("Location"));
+
+        verify(summaryService, times(0)).summarize(inputMessage);
     }
 
     @Test
@@ -60,6 +81,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isBadRequest());
@@ -76,6 +98,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isCreated())
@@ -92,6 +115,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization/stream")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isOk())
@@ -111,6 +135,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization/stream")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isOk())
@@ -128,6 +153,7 @@ class SummaryControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/summarization")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(multilineMessage))
                 .andExpect(status().isCreated())

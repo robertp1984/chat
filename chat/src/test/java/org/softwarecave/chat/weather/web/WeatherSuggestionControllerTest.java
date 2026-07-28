@@ -1,6 +1,8 @@
 package org.softwarecave.chat.weather.web;
 
 import org.junit.jupiter.api.Test;
+import org.softwarecave.chat.config.security.Role;
+import org.softwarecave.chat.utils.AuthUtils;
 import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
 import org.softwarecave.chat.weather.service.WeatherSuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ class WeatherSuggestionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))
@@ -74,6 +77,7 @@ class WeatherSuggestionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))
@@ -101,6 +105,7 @@ class WeatherSuggestionControllerTest {
 
         // Act
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))
@@ -126,6 +131,7 @@ class WeatherSuggestionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))
@@ -148,6 +154,7 @@ class WeatherSuggestionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))
@@ -172,6 +179,7 @@ class WeatherSuggestionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/weatherSuggestion")
+                        .with(AuthUtils.jwtAuth(Role.WEATHER_ALL.getTitle()))
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .accept(MediaType.APPLICATION_JSON))

@@ -2,7 +2,7 @@ package org.softwarecave.chat.weather.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.chat.geocoding.tool.GeocodingTool;
-import org.softwarecave.chat.config.ChatOptionsFactory;
+import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.weather.domain.WeatherProcessingException;
 import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
 import org.softwarecave.chat.weather.service.client.CurrentWeatherFormatter;

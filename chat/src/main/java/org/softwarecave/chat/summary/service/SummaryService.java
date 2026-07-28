@@ -1,13 +1,14 @@
 package org.softwarecave.chat.summary.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.softwarecave.chat.config.ChatOptionsFactory;
+import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.entity.SummaryEntity;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,7 @@ public class SummaryService {
 
 
     @Transactional
+    @Cacheable(value = "summarize")
     public Summary summarize(String text) {
         var textSummary = getAISummary(text);
         log.info("The summarized text is {}", textSummary);
@@ -83,6 +85,7 @@ public class SummaryService {
         return response.content();
     }
 
+    @Cacheable(value = "summarizeStream")
     public Flux<String> summarizeStream(String text) {
         return getAISummaryStream(text);
     }
