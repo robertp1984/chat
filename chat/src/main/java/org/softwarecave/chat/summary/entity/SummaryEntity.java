@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "summary")
@@ -25,10 +27,12 @@ public class SummaryEntity {
     private Long id;
 
     @Column(name = "text")
+    @JdbcTypeCode(SqlTypes.CLOB)
     @NotBlank
     private String text;
 
     @Column(name = "text_summary")
+    @JdbcTypeCode(SqlTypes.CLOB)
     @NotBlank
     private String textSummary;
 
