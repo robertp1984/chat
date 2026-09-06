@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Summary implements Serializable {
 
-    private Long id;
+    private SummaryId id;
     private String text;
     private String textSummary;
 
