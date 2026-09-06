@@ -1,10 +1,10 @@
 package org.softwarecave.chat.summary.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.domain.SummaryId;
-import org.softwarecave.chat.summary.entity.SummaryEntity;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -28,6 +28,7 @@ public class SummaryService {
     private final SummaryRepository summaryRepository;
     private final ChatOptionsFactory chatOptionsFactory;
     private final ChatClient chatClient;
+    private final SummaryMapper summaryMapper;
     private final String systemPrompt;
     private final int streamBufferMaxSize;
     private final int streamBufferMaxTime;
@@ -41,6 +42,7 @@ public class SummaryService {
         this.summaryRepository = summaryRepository;
         this.chatOptionsFactory = chatOptionsFactory;
         this.chatClient = chatClient;
+        this.summaryMapper = Mappers.getMapper(SummaryMapper.class);
         try {
             this.systemPrompt = systemPrompt.getContentAsString(StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -63,9 +65,9 @@ public class SummaryService {
 
     @Transactional
     public Summary saveSummary(Summary summary) {
-        var entityToSave = new SummaryEntity(summary.getId().value(), summary.getText(), summary.getTextSummary());
+        var entityToSave = summaryMapper.toEntity(summary);
         var entity = summaryRepository.save(entityToSave);
-        return new Summary(SummaryId.of(entity.getId()), entity.getText(), entity.getTextSummary());
+        return summaryMapper.toSummary(entity);
     }
 
     private String getAISummary(String msg) {
