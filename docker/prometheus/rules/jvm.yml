@@ -1,0 +1,13 @@
+groups:
+  - name: jvm
+    labels:
+      team: chat
+    rules:
+      - alert: HighJVMMemoryUsage
+        expr: sum(jvm_memory_used_bytes{area="heap"}) by (job) / sum(jvm_memory_max_bytes{area="heap"}) by (job) * 100 > 3
+        for: 3m
+        labels:
+          severity: high
+        annotations:
+          summary: High JVM memory usage {{$labels.job}}
+

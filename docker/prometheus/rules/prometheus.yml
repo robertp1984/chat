@@ -1,0 +1,12 @@
+groups:
+  - name: prometheus
+    labels:
+      team: chat
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
