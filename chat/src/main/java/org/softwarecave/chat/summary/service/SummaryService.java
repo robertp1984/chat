@@ -3,6 +3,7 @@ package org.softwarecave.chat.summary.service;
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.summary.domain.Summary;
+import org.softwarecave.chat.summary.domain.SummaryId;
 import org.softwarecave.chat.summary.entity.SummaryEntity;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.Generation;
@@ -56,14 +57,15 @@ public class SummaryService {
         var textSummary = getAISummary(text);
         log.info("The summarized text is {}", textSummary);
 
-        return saveSummary(new Summary(null, text, textSummary));
+        Summary summary = new Summary(SummaryId.generate(), text, textSummary);
+        return saveSummary(summary);
     }
 
     @Transactional
     public Summary saveSummary(Summary summary) {
-        var entityToSave = new SummaryEntity(summary.getText(), summary.getTextSummary());
+        var entityToSave = new SummaryEntity(summary.getId().value(), summary.getText(), summary.getTextSummary());
         var entity = summaryRepository.save(entityToSave);
-        return new Summary(entity.getId(), entity.getText(), entity.getTextSummary());
+        return new Summary(SummaryId.of(entity.getId()), entity.getText(), entity.getTextSummary());
     }
 
     private String getAISummary(String msg) {

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.softwarecave.chat.config.security.Role;
 import org.softwarecave.chat.summary.domain.Summary;
+import org.softwarecave.chat.summary.domain.SummaryId;
 import org.softwarecave.chat.summary.service.SummaryService;
 import org.softwarecave.chat.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ class SummaryControllerTest {
     void testSummarizeSuccess() throws Exception {
         // Arrange
         String inputMessage = "This is a test message to summarize";
-        Summary expectedSummary = new Summary(1L, inputMessage, "Summary: Test message");
+        Summary expectedSummary = new Summary(SummaryId.generate(), inputMessage, "Summary: Test message");
 
         when(summaryService.summarize(inputMessage)).thenReturn(expectedSummary);
 
@@ -57,7 +58,7 @@ class SummaryControllerTest {
     void testSummarizeNoJWT() throws Exception {
         // Arrange
         String inputMessage = "This is a test message to summarize";
-        Summary expectedSummary = new Summary(1L, inputMessage, "Summary: Test message");
+        Summary expectedSummary = new Summary(SummaryId.generate(), inputMessage, "Summary: Test message");
 
         when(summaryService.summarize(inputMessage)).thenReturn(expectedSummary);
 
@@ -75,7 +76,7 @@ class SummaryControllerTest {
     void testSummarizeWithEmptyInput() throws Exception {
         // Arrange
         String inputMessage = "";
-        Summary emptySummary = new Summary(1L, inputMessage, "");
+        Summary emptySummary = new Summary(SummaryId.generate(), inputMessage, "");
 
         when(summaryService.summarize(inputMessage)).thenReturn(emptySummary);
 
@@ -92,7 +93,7 @@ class SummaryControllerTest {
     void testSummarizeReturnsLocationHeader() throws Exception {
         // Arrange
         String inputMessage = "Test message";
-        Summary expectedSummary = new Summary(42L, inputMessage, "Summarized");
+        Summary expectedSummary = new Summary(SummaryId.generate(), inputMessage, "Summarized");
 
         when(summaryService.summarize(inputMessage)).thenReturn(expectedSummary);
 
@@ -102,7 +103,8 @@ class SummaryControllerTest {
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", containsString("42")));
+                .andExpect(header().string("Location",
+                        containsString(expectedSummary.getId().value().toString())));
     }
 
     @Test
@@ -147,7 +149,7 @@ class SummaryControllerTest {
         // Arrange
         String multilineMessage = "Line 1: Important task\nLine 2: Review needed\nLine 3: Deploy changes";
         String summary = "• Important task\nReview needed\nDeploy changes";
-        Summary expectedSummary = new Summary(4L, multilineMessage, summary);
+        Summary expectedSummary = new Summary(SummaryId.generate(), multilineMessage, summary);
 
         when(summaryService.summarize(multilineMessage)).thenReturn(expectedSummary);
 
