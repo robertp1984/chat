@@ -1,7 +1,7 @@
 package org.softwarecave.chat.summary.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
+
 import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.domain.SummaryId;
@@ -35,14 +35,14 @@ public class SummaryService {
 
 
     public SummaryService(SummaryRepository summaryRepository, ChatOptionsFactory chatOptionsFactory,
-                          ChatClient chatClient,
+                          ChatClient chatClient, SummaryMapper summaryMapper,
                           @Value("classpath:/prompts/summary-system-prompt.txt") Resource systemPrompt,
                           @Value("${app.ai.stream.buffer.max-size}") int streamBufferMaxSize,
                           @Value("${app.ai.stream.buffer.max-time}") int streamBufferMaxTime) {
         this.summaryRepository = summaryRepository;
         this.chatOptionsFactory = chatOptionsFactory;
         this.chatClient = chatClient;
-        this.summaryMapper = Mappers.getMapper(SummaryMapper.class);
+        this.summaryMapper = summaryMapper;
         try {
             this.systemPrompt = systemPrompt.getContentAsString(StandardCharsets.UTF_8);
         } catch (IOException e) {
