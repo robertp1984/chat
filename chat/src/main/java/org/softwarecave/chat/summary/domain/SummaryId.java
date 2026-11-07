@@ -5,10 +5,7 @@ import com.github.f4b6a3.uuid.UuidCreator;
 
 import java.util.UUID;
 
-public record SummaryId(UUID id) {
-    public UUID value() {
-        return id;
-    }
+public record SummaryId(UUID value) implements java.io.Serializable {
 
     public static SummaryId generate() {
         return new SummaryId(UuidCreator.getTimeOrderedEpoch());
