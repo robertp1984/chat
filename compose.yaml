@@ -79,8 +79,36 @@ services:
     depends_on:
       - elasticsearch
 
+  prometheus:
+    image: prom/prometheus:v3.13.1
+    hostname: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus:/etc/prometheus:ro
+      - data-prometheus:/prometheus
+
+
+  alertmanager:
+    build:
+      context: ./alertmanager
+      tags:
+        - robertp22/alertmanager:0.34.2
+      args:
+        VERSION: 0.34.2
+    hostname: alertmanager
+    ports:
+      - "9093:9093"
+    environment:
+      - SLACK_WEB_HOOK_URL=${SLACK_WEB_HOOK_URL}
+    restart: no
+    volumes:
+      - ./docker/alertmanager/alertmanager.yml.tpl:/etc/alertmanager/alertmanager.yml.tpl:ro
+
 
 volumes:
   data-postgresql:
   data-redis:
   data-elasticsearch:
+  data-prometheus:
+

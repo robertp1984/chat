@@ -1,0 +1,43 @@
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "rules/prometheus.yml"
+  - "rules/jvm.yml"
+  - "rules/http.yml"
+
+
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: [ "localhost:9090" ]
+        labels:
+          app: "prometheus"
+
+  - job_name: authserver
+    metrics_path: /actuator/prometheus
+    scheme: https
+    tls_config:
+      ca_file: "tls/NewCA.crt"
+    static_configs:
+      - targets: [ "authserver:9000" ]
+        labels:
+          app: "authserver"
+
+  - job_name: chat
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ "chat:8080" ]
+        labels:
+          app: "chat"

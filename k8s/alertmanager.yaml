@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+        - name: alertmanager
+          image: robertp22/alertmanager:0.34.2
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "2"
+          securityContext:
+            allowPrivilegeEscalation: false
+            #runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+          ports:
+            - containerPort: 9093
+          env:
+            - name: SLACK_WEB_HOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: slack-web-hook-url
+                  key: SLACK_WEB_HOOK_URL
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9093
+            initialDelaySeconds: 30
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9093
+            initialDelaySeconds: 30
+            periodSeconds: 2
+          volumeMounts:
+            - name: alertmanager-config
+              mountPath: /etc/alertmanager/alertmanager.yml.tpl
+              subPath: alertmanager.yml.tpl
+              readOnly: true
+      volumes:
+        - name: alertmanager-config
+          configMap:
+            name: alertmanager-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+spec:
+  selector:
+    app: alertmanager
+  ports:
+    - port: 9093
+      targetPort: 9093
+  type: ClusterIP
