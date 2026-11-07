@@ -4,7 +4,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: main-ingress
-  namespace: chat
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -15,6 +14,8 @@ spec:
         - chat.127.0.0.1.nip.io
         - authserver.127.0.0.1.nip.io
         - authserver
+        - prometheus.127.0.0.1.nip.io
+        - alertmanager.127.0.0.1.nip.io
       secretName: ingress-tls
   ingressClassName: nginx
   rules:
@@ -58,4 +59,23 @@ spec:
                 name: authserver
                 port:
                   number: 9000
-
+    - host: prometheus.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 9090
+    - host: alertmanager.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: alertmanager
+                port:
+                  number: 9093

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v3.13.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+        securityContext:
+          allowPrivilegeEscalation: false
+          #runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+        ports:
+        - containerPort: 9090
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9090
+          initialDelaySeconds: 30
+          periodSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9090
+          initialDelaySeconds: 30
+          periodSeconds: 2
+        volumeMounts:
+          - name: etc-prometheus
+            mountPath: /etc/prometheus
+            readOnly: true
+      volumes:
+        - name: etc-prometheus
+          projected:
+            sources:
+              - configMap:
+                  name: prometheus-config   # docker/prometheus/*       -> /etc/prometheus/
+              - configMap:
+                  name: prometheus-rules    # docker/prometheus/rules/* -> /etc/prometheus/rules/
+                  items:
+                    - key: prometheus.yml
+                      path: rules/prometheus.yml
+                    - key: jvm.yml
+                      path: rules/jvm.yml
+                    - key: http.yml
+                      path: rules/http.yml
+              - configMap:
+                  name: prometheus-tls      # docker/prometheus/tls/*   -> /etc/prometheus/tls/
+                  items:
+                    - key: NewCA.crt
+                      path: tls/NewCA.crt
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - port: 9090
+      targetPort: 9090
+  type: ClusterIP
+  
