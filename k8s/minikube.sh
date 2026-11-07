@@ -30,12 +30,13 @@ kubectl create secret generic openai-api-key --from-literal=OPENAI_API_KEY=${OPE
 kubectl create secret generic api-ninjas-api-key --from-literal=API_NINJAS_API_KEY=${API_NINJAS_API_KEY}
 kubectl apply -f chat.yaml
 
-# Prometheus & AlertManager
+# Prometheus
 kubectl create secret generic slack-web-hook-url --from-literal=SLACK_WEB_HOOK_URL=${SLACK_WEB_HOOK_URL}
 kubectl create configmap prometheus-config --from-file=prometheus/config/prometheus.yml --dry-run=client -o yaml | kubectl apply -f -
 kubectl create configmap prometheus-rules --from-file=../docker/prometheus/rules/ --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -f prometheus/prometheus.yaml
 
+# AlertManager
 kubectl create configmap alertmanager-config --from-file=../docker/alertmanager/ --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -f alertmanager.yaml
 
