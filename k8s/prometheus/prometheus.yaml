@@ -60,7 +60,7 @@ spec:
           projected:
             sources:
               - configMap:
-                  name: prometheus-config   # docker/prometheus/*       -> /etc/prometheus/
+                  name: prometheus-config   # k8s/prometheus/prometheus.yml -> /etc/prometheus/
               - configMap:
                   name: prometheus-rules    # docker/prometheus/rules/* -> /etc/prometheus/rules/
                   items:
@@ -70,11 +70,6 @@ spec:
                       path: rules/jvm.yml
                     - key: http.yml
                       path: rules/http.yml
-              - configMap:
-                  name: prometheus-tls      # docker/prometheus/tls/*   -> /etc/prometheus/tls/
-                  items:
-                    - key: NewCA.crt
-                      path: tls/NewCA.crt
 
 ---
 apiVersion: v1

@@ -20,7 +20,7 @@ helm repo update
 
 
 # Redis using Helm
-helm install redis bitnami/redis -f helm/redis-values.yaml
+helm install redis bitnami/redis -f redis/redis-values.yaml
 
 # OAuth2 authentication server
 kubectl apply -f authserver.yaml
@@ -32,18 +32,17 @@ kubectl apply -f chat.yaml
 
 # Prometheus & AlertManager
 kubectl create secret generic slack-web-hook-url --from-literal=SLACK_WEB_HOOK_URL=${SLACK_WEB_HOOK_URL}
-kubectl create configmap prometheus-config --from-file=../docker/prometheus/ --dry-run=client -o yaml | kubectl apply -f -
+kubectl create configmap prometheus-config --from-file=prometheus/config/prometheus.yml --dry-run=client -o yaml | kubectl apply -f -
 kubectl create configmap prometheus-rules --from-file=../docker/prometheus/rules/ --dry-run=client -o yaml | kubectl apply -f -
-kubectl create configmap prometheus-tls --from-file=../docker/prometheus/tls/ --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -f prometheus.yaml
+kubectl apply -f prometheus/prometheus.yaml
 
 kubectl create configmap alertmanager-config --from-file=../docker/alertmanager/ --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -f alertmanager.yaml
 
 
 # Ingress with TLS and dummy certificate
-kubectl create secret tls ingress-tls --key tls/localhost.pem --cert tls/localhost.crt
-kubectl apply -f ingress.yaml
+kubectl create secret tls ingress-tls --key ingress/tls/localhost.pem --cert ingress/tls/localhost.crt
+kubectl apply -f ingress/ingress.yaml
 
 
 # Minikube tunnel
