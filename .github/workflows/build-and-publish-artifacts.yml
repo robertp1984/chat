@@ -59,6 +59,8 @@ jobs:
         service:
           - name: chat
             image: robertp22/chat
+          - name: alertmanager
+            image: robertp22/alertmanager
             
     steps:
       - name: Checkout code
