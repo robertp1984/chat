@@ -56,6 +56,7 @@ public class SummaryService {
     @Transactional
     @Cacheable(value = "summarize")
     public Summary summarize(String text) {
+        log.info("Getting AI summary for text '{}'", text);
         var textSummary = getAISummary(text);
         log.info("The summarized text is {}", textSummary);
 
@@ -91,6 +92,7 @@ public class SummaryService {
 
     @Cacheable(value = "summarizeStream")
     public Flux<String> summarizeStream(String text) {
+        log.info("Getting AI summary as stream for text '{}'", text);
         return getAISummaryStream(text);
     }
 
