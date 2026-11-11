@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
-
 @Slf4j
 @Component
 public class ValidatingAdvisor implements CallAdvisor, StreamAdvisor {
@@ -30,9 +29,9 @@ public class ValidatingAdvisor implements CallAdvisor, StreamAdvisor {
         return callAdvisorChain.nextCall(chatClientRequest);
     }
 
-
     @Override
-    public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain) {
+    public Flux<ChatClientResponse> adviseStream(
+            ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain) {
         validateInput(chatClientRequest);
 
         return streamAdvisorChain.nextStream(chatClientRequest);
@@ -59,7 +58,8 @@ public class ValidatingAdvisor implements CallAdvisor, StreamAdvisor {
                 .sum();
 
         if (sum > maxInputLength) {
-            throw new ChatInputValidationException("Chat input must be maximum %s character long".formatted(maxInputLength));
+            throw new ChatInputValidationException(
+                    "Chat input must be maximum %s character long".formatted(maxInputLength));
         }
     }
 }

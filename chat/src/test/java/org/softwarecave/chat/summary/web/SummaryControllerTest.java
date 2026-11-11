@@ -1,5 +1,14 @@
 package org.softwarecave.chat.summary.web;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.softwarecave.chat.config.security.Role;
@@ -14,15 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import reactor.core.publisher.Flux;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SummaryController.class)
 @ActiveProfiles("test")
@@ -88,7 +88,6 @@ class SummaryControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-
     @Test
     void testSummarizeReturnsLocationHeader() throws Exception {
         // Arrange
@@ -103,8 +102,9 @@ class SummaryControllerTest {
                         .contentType(MediaType.TEXT_PLAIN_VALUE)
                         .content(inputMessage))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location",
-                        containsString(expectedSummary.getId().value().toString())));
+                .andExpect(header().string(
+                                "Location",
+                                containsString(expectedSummary.getId().value().toString())));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.softwarecave.chat.summary.web;
 
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.softwarecave.chat.summary.service.SummaryService;
 import org.springframework.http.MediaType;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import reactor.core.publisher.Flux;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/api/v1/summarization")
@@ -36,5 +35,4 @@ public class SummaryController {
         var summarizedMsg = summaryService.summarizeStream(msg);
         return ResponseEntity.ok(summarizedMsg);
     }
-
 }

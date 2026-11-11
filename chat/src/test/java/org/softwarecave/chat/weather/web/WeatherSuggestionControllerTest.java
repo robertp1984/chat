@@ -1,5 +1,15 @@
 package org.softwarecave.chat.weather.web;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.softwarecave.chat.config.security.Role;
 import org.softwarecave.chat.utils.AuthUtils;
@@ -11,17 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(WeatherSuggestionController.class)
 @ActiveProfiles("test")
@@ -41,7 +40,8 @@ class WeatherSuggestionControllerTest {
         List<String> weatherLines = List.of("Temperature: 25°C", "Rain: 5mm");
         List<String> locationLines = List.of("Location: Sample City");
         String clothingSuggestion = "Wear light clothing and sunscreen.";
-        WeatherSuggestionResponse response = new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
+        WeatherSuggestionResponse response =
+                new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);
@@ -70,7 +70,8 @@ class WeatherSuggestionControllerTest {
         double latitude = 35.6762;
         double longitude = 139.6503;
         List<String> locationLines = List.of("Location: Sample City");
-        WeatherSuggestionResponse response = new WeatherSuggestionResponse(List.of(), locationLines, "No weather data available.");
+        WeatherSuggestionResponse response =
+                new WeatherSuggestionResponse(List.of(), locationLines, "No weather data available.");
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);
@@ -95,10 +96,7 @@ class WeatherSuggestionControllerTest {
         double longitude = -122.4194;
         List<String> locationLines = List.of("Location: San Francisco, CA");
         WeatherSuggestionResponse response = new WeatherSuggestionResponse(
-                List.of("Temperature: 22°C"),
-                locationLines,
-                "Great weather for outdoor activities."
-        );
+                List.of("Temperature: 22°C"), locationLines, "Great weather for outdoor activities.");
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);
@@ -122,9 +120,7 @@ class WeatherSuggestionControllerTest {
         double longitude = 13.4050;
         List<String> locationLines = List.of("Location: Berlin, Germany");
         WeatherSuggestionResponse response = new WeatherSuggestionResponse(
-                List.of("Temperature: 18°C"),
-                locationLines,
-                "Wear layers for temperature changes.");
+                List.of("Temperature: 18°C"), locationLines, "Wear layers for temperature changes.");
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);
@@ -147,7 +143,8 @@ class WeatherSuggestionControllerTest {
         List<String> weatherLines = List.of("Temperature: 16°C");
         List<String> locationLines = List.of("Location: Bucharest, Romania");
         String clothingSuggestion = "Bring a light jacket.";
-        WeatherSuggestionResponse response = new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
+        WeatherSuggestionResponse response =
+                new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);
@@ -172,7 +169,8 @@ class WeatherSuggestionControllerTest {
         List<String> weatherLines = List.of("Temperature: 15°C", "Rain: 20mm");
         List<String> locationLines = List.of("Location: Sample City");
         String clothingSuggestion = "Wear light clothing and take umbrella.";
-        WeatherSuggestionResponse response = new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
+        WeatherSuggestionResponse response =
+                new WeatherSuggestionResponse(weatherLines, locationLines, clothingSuggestion);
 
         when(weatherSuggestionService.getClothingSuggestion(latitude, longitude))
                 .thenReturn(response);

@@ -1,6 +1,5 @@
 package org.softwarecave.chat.weather.service.client;
 
-
 import org.mapstruct.Mapper;
 import org.softwarecave.openmeteo.api.model.V1ForecastGet200Response;
 

@@ -1,5 +1,11 @@
 package org.softwarecave.chat.geocoding;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
 import org.softwarecave.chat.geocoding.service.GeocodingClient;
@@ -9,13 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import tools.jackson.databind.json.JsonMapper;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RestClientTest(GeocodingClient.class)
 @ActiveProfiles("test")
@@ -46,9 +45,9 @@ public class GeocodingClientTest {
 
         var locations = geocodingClient.getGeocodingLocations("Warsaw", "Poland");
 
-        assertThat(locations).isNotNull()
-                .hasSize(1);
-        assertThat(locations.getFirst()).hasFieldOrPropertyWithValue("name", "Warsaw")
+        assertThat(locations).isNotNull().hasSize(1);
+        assertThat(locations.getFirst())
+                .hasFieldOrPropertyWithValue("name", "Warsaw")
                 .hasFieldOrPropertyWithValue("latitude", LATITUDE)
                 .hasFieldOrPropertyWithValue("longitude", LONGITUDE)
                 .hasFieldOrPropertyWithValue("country", "Poland");
@@ -62,8 +61,7 @@ public class GeocodingClientTest {
 
         var locations = geocodingClient.getGeocodingLocations("NonExistentCity", "Nowhere");
 
-        assertThat(locations).isNotNull()
-                .isEmpty();
+        assertThat(locations).isNotNull().isEmpty();
     }
 
     @Test
@@ -74,14 +72,13 @@ public class GeocodingClientTest {
 
         var locations = geocodingClient.getReverseGeocodingLocations(LATITUDE, LONGITUDE);
 
-        assertThat(locations).isNotNull()
-                .hasSize(1);
-        assertThat(locations.getFirst()).hasFieldOrPropertyWithValue("name", "Warsaw")
+        assertThat(locations).isNotNull().hasSize(1);
+        assertThat(locations.getFirst())
+                .hasFieldOrPropertyWithValue("name", "Warsaw")
                 .hasFieldOrPropertyWithValue("latitude", LATITUDE)
                 .hasFieldOrPropertyWithValue("longitude", LONGITUDE)
                 .hasFieldOrPropertyWithValue("country", "Poland");
     }
-
 
     @Test
     void testGetReverseGeocodingLocations_emptyResponse() {
@@ -91,7 +88,6 @@ public class GeocodingClientTest {
 
         var locations = geocodingClient.getReverseGeocodingLocations(0.0, 0.0);
 
-        assertThat(locations).isNotNull()
-                .isEmpty();
+        assertThat(locations).isNotNull().isEmpty();
     }
 }

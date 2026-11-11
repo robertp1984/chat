@@ -1,5 +1,6 @@
 package org.softwarecave.chat.geocoding.tool;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.softwarecave.chat.geocoding.domain.GeocodingException;
 import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
@@ -8,8 +9,6 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class GeocodingTool {
@@ -17,8 +16,9 @@ public class GeocodingTool {
     private final GeocodingClient geocodingClient;
 
     @Tool(description = "Get the geocoding location for a given city and country")
-    public GeocodingLocation getGeocodingLocation(@ToolParam(description = "City name") String city,
-                                                  @ToolParam(description = "Country name") String country) {
+    public GeocodingLocation getGeocodingLocation(
+            @ToolParam(description = "City name") String city,
+            @ToolParam(description = "Country name") String country) {
         List<GeocodingLocation> locations = geocodingClient.getGeocodingLocations(city, country);
 
         if (locations == null || locations.isEmpty()) {
@@ -29,15 +29,16 @@ public class GeocodingTool {
     }
 
     @Tool(description = "Get the reverse geocoding location for a given latitude and longitude")
-    public GeocodingLocation getReverseGeocodingLocation(@ToolParam(description = "Latitude") double latitude,
-                                                         @ToolParam(description = "Longitude") double longitude) {
+    public GeocodingLocation getReverseGeocodingLocation(
+            @ToolParam(description = "Latitude") double latitude,
+            @ToolParam(description = "Longitude") double longitude) {
         List<GeocodingLocation> locations = geocodingClient.getReverseGeocodingLocations(latitude, longitude);
 
         if (locations == null || locations.isEmpty()) {
-            throw new GeocodingException("No reverse geocoding location found for latitude: " + latitude + ", longitude: " + longitude);
+            throw new GeocodingException(
+                    "No reverse geocoding location found for latitude: " + latitude + ", longitude: " + longitude);
         } else {
             return locations.getFirst();
         }
     }
-
 }
