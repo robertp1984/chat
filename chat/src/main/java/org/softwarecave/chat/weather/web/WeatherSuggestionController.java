@@ -16,10 +16,9 @@ public class WeatherSuggestionController {
     private final WeatherSuggestionService weatherSuggestionService;
 
     @GetMapping
-    public String getSuggestion(@RequestParam("latitude") double latitude,
-                                @RequestParam("longitude") double longitude) {
+    public String getSuggestion(
+            @RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude) {
         var weatherSuggestion = weatherSuggestionService.getClothingSuggestion(latitude, longitude);
         return WeatherSuggestionResponseFormatter.format(weatherSuggestion);
     }
-
 }

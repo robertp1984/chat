@@ -1,7 +1,9 @@
 package org.softwarecave.chat.summary.service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
-
 import org.softwarecave.chat.config.ai.ChatOptionsFactory;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.domain.SummaryId;
@@ -14,10 +16,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 
 @Service
 @Slf4j
@@ -33,12 +31,14 @@ public class SummaryService {
     private final int streamBufferMaxSize;
     private final int streamBufferMaxTime;
 
-
-    public SummaryService(SummaryRepository summaryRepository, ChatOptionsFactory chatOptionsFactory,
-                          ChatClient chatClient, SummaryMapper summaryMapper,
-                          @Value("classpath:/prompts/summary-system-prompt.txt") Resource systemPrompt,
-                          @Value("${app.ai.stream.buffer.max-size}") int streamBufferMaxSize,
-                          @Value("${app.ai.stream.buffer.max-time}") int streamBufferMaxTime) {
+    public SummaryService(
+            SummaryRepository summaryRepository,
+            ChatOptionsFactory chatOptionsFactory,
+            ChatClient chatClient,
+            SummaryMapper summaryMapper,
+            @Value("classpath:/prompts/summary-system-prompt.txt") Resource systemPrompt,
+            @Value("${app.ai.stream.buffer.max-size}") int streamBufferMaxSize,
+            @Value("${app.ai.stream.buffer.max-time}") int streamBufferMaxTime) {
         this.summaryRepository = summaryRepository;
         this.chatOptionsFactory = chatOptionsFactory;
         this.chatClient = chatClient;
@@ -51,7 +51,6 @@ public class SummaryService {
         this.streamBufferMaxSize = streamBufferMaxSize;
         this.streamBufferMaxTime = streamBufferMaxTime;
     }
-
 
     @Transactional
     @Cacheable(value = "summarize")
@@ -74,7 +73,8 @@ public class SummaryService {
     private String getAISummary(String msg) {
         var chatOptions = chatOptionsFactory.create(1000, 1.0);
 
-        var response = chatClient.prompt()
+        var response = chatClient
+                .prompt()
                 .system(systemPrompt)
                 .user(msg)
                 .options(chatOptions)
@@ -97,16 +97,16 @@ public class SummaryService {
     }
 
     private Flux<String> getAISummaryStream(String msg) {
-        var response = chatClient.prompt()
+        var response = chatClient
+                .prompt()
                 .system(systemPrompt)
                 .user(msg)
-                .options(OpenAiChatOptions.builder()
-                        .maxCompletionTokens(1000))
+                .options(OpenAiChatOptions.builder().maxCompletionTokens(1000))
                 .stream();
         Flux<String> responseTokens = response.content();
 
-        return responseTokens.bufferTimeout(streamBufferMaxSize, Duration.ofMillis(streamBufferMaxTime))
+        return responseTokens
+                .bufferTimeout(streamBufferMaxSize, Duration.ofMillis(streamBufferMaxTime))
                 .map(list -> String.join(" ", list));
     }
-
 }

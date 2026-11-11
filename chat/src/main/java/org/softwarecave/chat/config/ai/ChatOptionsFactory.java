@@ -17,11 +17,8 @@ public class ChatOptionsFactory {
 
     public ChatOptions.Builder<?> create(Integer maxTokens, Double temperature) {
         return switch (aiModel) {
-            case "openai" -> OpenAiChatOptions.builder()
-                    .maxCompletionTokens(maxTokens);
-            case "ollama" -> OllamaChatOptions.builder()
-                    .maxTokens(maxTokens)
-                    .temperature(temperature);
+            case "openai" -> OpenAiChatOptions.builder().maxCompletionTokens(maxTokens);
+            case "ollama" -> OllamaChatOptions.builder().maxTokens(maxTokens).temperature(temperature);
             default -> throw new IllegalArgumentException("Unrecognized model " + aiModel);
         };
     }

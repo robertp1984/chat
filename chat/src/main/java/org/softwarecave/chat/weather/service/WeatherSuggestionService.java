@@ -1,8 +1,10 @@
 package org.softwarecave.chat.weather.service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
-import org.softwarecave.chat.geocoding.tool.GeocodingTool;
 import org.softwarecave.chat.config.ai.ChatOptionsFactory;
+import org.softwarecave.chat.geocoding.tool.GeocodingTool;
 import org.softwarecave.chat.weather.domain.WeatherProcessingException;
 import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
 import org.softwarecave.chat.weather.service.client.CurrentWeatherFormatter;
@@ -12,10 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
 
 @Service
 @Slf4j
@@ -27,9 +25,12 @@ public class WeatherSuggestionService {
     private final String systemPrompt;
     private final GeocodingTool geocodingTool;
 
-    public WeatherSuggestionService(ChatClient chatClient, WeatherClient weatherClient, ChatOptionsFactory chatOptionsFactory,
-                                    @Value("classpath:/prompts/weather-suggestion-system-prompt.txt") Resource systemPrompt,
-                                    GeocodingTool geocodingTool) {
+    public WeatherSuggestionService(
+            ChatClient chatClient,
+            WeatherClient weatherClient,
+            ChatOptionsFactory chatOptionsFactory,
+            @Value("classpath:/prompts/weather-suggestion-system-prompt.txt") Resource systemPrompt,
+            GeocodingTool geocodingTool) {
         this.chatClient = chatClient;
         this.weatherClient = weatherClient;
         this.chatOptionsFactory = chatOptionsFactory;
@@ -65,4 +66,3 @@ public class WeatherSuggestionService {
         }
     }
 }
-

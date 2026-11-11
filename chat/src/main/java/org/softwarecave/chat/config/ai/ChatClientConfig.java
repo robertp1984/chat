@@ -1,5 +1,6 @@
 package org.softwarecave.chat.config.ai;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.softwarecave.chat.config.ai.advisors.ValidatingAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -10,8 +11,6 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor

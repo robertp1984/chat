@@ -1,5 +1,10 @@
 package org.softwarecave.chat.geocoding;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,12 +14,6 @@ import org.softwarecave.chat.geocoding.domain.GeocodingException;
 import org.softwarecave.chat.geocoding.domain.GeocodingLocation;
 import org.softwarecave.chat.geocoding.service.GeocodingClient;
 import org.softwarecave.chat.geocoding.tool.GeocodingTool;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GeocodingToolTest {

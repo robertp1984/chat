@@ -1,10 +1,9 @@
 package org.softwarecave.chat.summary.service;
 
+import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.softwarecave.chat.summary.domain.SummaryId;
-
-import java.util.UUID;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface SummaryIdMapper {

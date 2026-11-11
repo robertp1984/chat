@@ -1,5 +1,7 @@
 package org.softwarecave.chat.summary.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.softwarecave.chat.summary.domain.Summary;
 import org.softwarecave.chat.summary.domain.SummaryId;
@@ -10,10 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest
-@Import( { TestContainersConfiguration.class, SummaryMapperImpl.class })
+@Import({TestContainersConfiguration.class, SummaryMapperImpl.class})
 @ActiveProfiles("test")
 public class SummaryServiceIT {
 

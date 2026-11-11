@@ -1,13 +1,12 @@
 package org.softwarecave.chat.weather.service;
 
-import org.junit.jupiter.api.Test;
-import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.softwarecave.chat.weather.domain.WeatherSuggestionResponse;
 
 class WeatherSuggestionResponseFormatterTest {
 
@@ -34,11 +33,7 @@ class WeatherSuggestionResponseFormatterTest {
     @Test
     void testFormatWithMultipleWeatherLines() {
         // Arrange
-        List<String> weatherLines = List.of(
-                "Sunny, 25°C",
-                "Humidity: 45%",
-                "Wind: 10 km/h"
-        );
+        List<String> weatherLines = List.of("Sunny, 25°C", "Humidity: 45%", "Wind: 10 km/h");
         List<String> locationLines = List.of("City: Sample City");
         String suggestion = "Wear light, breathable clothing. Bring a hat for sun protection.";
         WeatherSuggestionResponse response = new WeatherSuggestionResponse(weatherLines, locationLines, suggestion);
@@ -120,12 +115,11 @@ class WeatherSuggestionResponseFormatterTest {
                 "Temperature: 18°C",
                 "Humidity: 65%",
                 "Wind: 12 km/h from the northeast",
-                "UV Index: 3 (moderate)"
-        );
+                "UV Index: 3 (moderate)");
         List<String> locationLines = List.of("Location: Sample City");
-        String suggestion = "Wear layers that can be adjusted throughout the day. " +
-                "Bring a light rain jacket just in case. Comfortable jeans or trousers would be appropriate. " +
-                "Non-slip shoes recommended if walking outdoors.";
+        String suggestion = "Wear layers that can be adjusted throughout the day. "
+                + "Bring a light rain jacket just in case. Comfortable jeans or trousers would be appropriate. "
+                + "Non-slip shoes recommended if walking outdoors.";
         WeatherSuggestionResponse response = new WeatherSuggestionResponse(weatherLines, locationLines, suggestion);
 
         // Act
@@ -138,5 +132,4 @@ class WeatherSuggestionResponseFormatterTest {
         assertTrue(result.contains("Partly cloudy with a chance of rain"));
         assertTrue(result.contains("Bring a light rain jacket just in case"));
     }
-
 }
