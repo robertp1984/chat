@@ -13,7 +13,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Import(TestContainersConfiguration.class)
+@Import( { TestContainersConfiguration.class, SummaryMapperImpl.class })
 @ActiveProfiles("test")
 public class SummaryServiceIT {
 
