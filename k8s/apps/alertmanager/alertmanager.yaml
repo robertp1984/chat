@@ -47,16 +47,16 @@ spec:
                   key: SLACK_WEB_HOOK_URL
           readinessProbe:
             httpGet:
-              path: /
+              path: /-/ready
               port: 9093
             initialDelaySeconds: 30
-            periodSeconds: 2
+            periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /
+              path: /-/healthy
               port: 9093
             initialDelaySeconds: 30
-            periodSeconds: 2
+            periodSeconds: 10
           volumeMounts:
             - name: alertmanager-config
               mountPath: /etc/alertmanager/alertmanager.yml.tpl

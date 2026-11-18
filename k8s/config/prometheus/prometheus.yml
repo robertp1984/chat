@@ -12,7 +12,7 @@ alerting:
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  - "rules/prometheus.yml"
+  - "rules/instance.yml"
   - "rules/jvm.yml"
   - "rules/http.yml"
 

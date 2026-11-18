@@ -1,19 +1,6 @@
 name: chat
 
 services:
-  postgresql:
-    image: postgres:18.0
-    hostname: postgresql
-    volumes:
-      - data-postgresql:/var/lib/postgresql/18/docker
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
-    restart: no
-    ports:
-      - "5432:5432"
 
   chat:
     build:
@@ -52,63 +39,7 @@ services:
       - "9000:9000"
     restart: no
 
-  elasticsearch:
-    image: elasticsearch:9.4.3
-    hostname: elasticsearch
-    environment:
-      discovery.type: single-node
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-      ELASTIC_PASSWORD: elastic
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - data-elasticsearch:/usr/share/elasticsearch/data
-
-
-  kibana:
-    image: kibana:9.4.3
-    hostname: kibana
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
-#      - ELASTICSEARCH_USERNAME=kibana_system
-#      - ELASTICSEARCH_PASSWORD=REUruWHquzb=V2_DtWq_
-      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
-    depends_on:
-      - elasticsearch
-
-  prometheus:
-    image: prom/prometheus:v3.13.1
-    hostname: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./docker/prometheus:/etc/prometheus:ro
-      - data-prometheus:/prometheus
-
-
-  alertmanager:
-    build:
-      context: ./alertmanager
-      tags:
-        - robertp22/alertmanager:0.34.2
-      args:
-        VERSION: 0.34.2
-    hostname: alertmanager
-    ports:
-      - "9093:9093"
-    environment:
-      - SLACK_WEB_HOOK_URL=${SLACK_WEB_HOOK_URL}
-    restart: no
-    volumes:
-      - ./docker/alertmanager/alertmanager.yml.tpl:/etc/alertmanager/alertmanager.yml.tpl:ro
-
 
 volumes:
-  data-postgresql:
   data-redis:
-  data-elasticsearch:
-  data-prometheus:
 
