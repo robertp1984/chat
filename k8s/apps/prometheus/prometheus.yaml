@@ -60,9 +60,9 @@ spec:
           projected:
             sources:
               - configMap:
-                  name: prometheus-config   # k8s/prometheus/instance.yml -> /etc/prometheus/
+                  name: prometheus-config   # config/prometheus/prometheus.yml -> /etc/prometheus/
               - configMap:
-                  name: prometheus-rules    # k8s/prometheus/rules/rules/* -> /etc/prometheus/rules/
+                  name: prometheus-rules    # config/prometheus/rules/* -> /etc/prometheus/rules/
                   items:
                     - key: instance.yml
                       path: rules/instance.yml

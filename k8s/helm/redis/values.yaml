@@ -11,11 +11,11 @@ master:
     size: 1Gi
   resources:
     requests:
-      cpu: 500m
-      memory: 64M
+      cpu: 100m
+      memory: 64Mi
     limits:
       cpu: 500m
-      memory: 128M
+      memory: 256Mi
 
 replica:
   replicaCount: 2
@@ -24,11 +24,11 @@ replica:
     size: 1Gi
   resources:
     requests:
-      cpu: 500m
-      memory: 64M
+      cpu: 100m
+      memory: 64Mi
     limits:
       cpu: 500m
-      memory: 128M
+      memory: 256Mi
 
 volumePermissions:
   enabled: true

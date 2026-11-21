@@ -39,6 +39,16 @@ services:
       - "9000:9000"
     restart: no
 
+  # For docker compose build only (profile keeps it out of `docker compose up`)
+  alertmanager:
+    profiles: [ build ]
+    build:
+      context: ./alertmanager
+      tags:
+        - robertp22/alertmanager:0.34.2
+    restart: no
+
+
 
 volumes:
   data-redis:

@@ -2,7 +2,7 @@
 
 # Namespaces and current namespace
 kubectl apply -f apps/namespaces.yaml
-kns chat
+kubectl config set-context --current --namespace=chat
 
 
 # Secrets
