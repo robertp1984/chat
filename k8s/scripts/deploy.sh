@@ -18,7 +18,7 @@ helm repo update
 
 
 # Redis using Helm
-helm install redis bitnami/redis -f helm/redis/redis-values.yaml
+helm install redis bitnami/redis -f helm/redis/values.yaml
 
 # OAuth2 authentication server
 kubectl apply -f apps/authserver/authserver.yaml
