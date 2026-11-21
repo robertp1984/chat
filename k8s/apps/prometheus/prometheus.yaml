@@ -41,16 +41,16 @@ spec:
         - containerPort: 9090
         readinessProbe:
           httpGet:
-            path: /
+            path: /-/ready
             port: 9090
           initialDelaySeconds: 30
-          periodSeconds: 2
+          periodSeconds: 10
         livenessProbe:
           httpGet:
-            path: /
+            path: /-/healthy
             port: 9090
           initialDelaySeconds: 30
-          periodSeconds: 2
+          periodSeconds: 10
         volumeMounts:
           - name: etc-prometheus
             mountPath: /etc/prometheus
@@ -60,12 +60,12 @@ spec:
           projected:
             sources:
               - configMap:
-                  name: prometheus-config   # k8s/prometheus/prometheus.yml -> /etc/prometheus/
+                  name: prometheus-config   # config/prometheus/prometheus.yml -> /etc/prometheus/
               - configMap:
-                  name: prometheus-rules    # docker/prometheus/rules/* -> /etc/prometheus/rules/
+                  name: prometheus-rules    # config/prometheus/rules/* -> /etc/prometheus/rules/
                   items:
-                    - key: prometheus.yml
-                      path: rules/prometheus.yml
+                    - key: instance.yml
+                      path: rules/instance.yml
                     - key: jvm.yml
                       path: rules/jvm.yml
                     - key: http.yml

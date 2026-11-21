@@ -1,0 +1,34 @@
+auth:
+  enabled: true
+  existingSecret: secrets
+  existingSecretPasswordKey: redis-password
+
+architecture: replication
+
+master:
+  persistence:
+    enabled: true
+    size: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+replica:
+  replicaCount: 2
+  persistence:
+    enabled: true
+    size: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+volumePermissions:
+  enabled: true
