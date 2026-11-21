@@ -10,10 +10,7 @@ spec:
     matchLabels:
       app: prometheus
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+    type: Recreate
   template:
     metadata:
       labels:
@@ -23,6 +20,11 @@ spec:
       - name: prometheus
         image: prom/prometheus:v3.13.1
         imagePullPolicy: IfNotPresent
+        args:
+          - --config.file=/etc/prometheus/prometheus.yml
+          - --storage.tsdb.path=/prometheus
+          - --storage.tsdb.retention.time=30d
+          - --storage.tsdb.retention.size=1500GB # below PVC size with some room
         resources:
           requests:
             memory: "128Mi"
@@ -55,6 +57,8 @@ spec:
           - name: etc-prometheus
             mountPath: /etc/prometheus
             readOnly: true
+          - name: prometheus-data
+            mountPath: /prometheus
       volumes:
         - name: etc-prometheus
           projected:
@@ -70,6 +74,21 @@ spec:
                       path: rules/jvm.yml
                     - key: http.yml
                       path: rules/http.yml
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
 
 ---
 apiVersion: v1

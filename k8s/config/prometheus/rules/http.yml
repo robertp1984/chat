@@ -10,3 +10,4 @@ groups:
         severity: warning
       annotations:
         summary: "High latency detected (p95 > 1s)"
+        description: "High latency detected (p95 > 1s)"

@@ -10,3 +10,4 @@ groups:
           severity: critical
         annotations:
           summary: "Instance {{ $labels.instance }} is down"
+          description: "Instance {{ $labels.instance }} is down"
