@@ -43,12 +43,12 @@ spec:
           - name: OPENAI_API_KEY
             valueFrom:
               secretKeyRef:
-                name: openai-api-key
+                name: api-keys
                 key: OPENAI_API_KEY
           - name: API_NINJAS_API_KEY
             valueFrom:
               secretKeyRef:
-                name: api-ninjas-api-key
+                name: api-keys
                 key: API_NINJAS_API_KEY
           - name: SPRING_DATA_REDIS_HOST
             value: redis-master

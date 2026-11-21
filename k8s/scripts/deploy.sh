@@ -7,10 +7,7 @@ kubectl config set-context --current --namespace=chat
 
 # Secrets
 kubectl apply -f apps/secrets.yaml
-kubectl create secret generic openai-api-key --from-literal=OPENAI_API_KEY=${OPENAI_API_KEY}
-kubectl create secret generic api-ninjas-api-key --from-literal=API_NINJAS_API_KEY=${API_NINJAS_API_KEY}
-kubectl create secret generic slack-web-hook-url --from-literal=SLACK_WEB_HOOK_URL=${SLACK_WEB_HOOK_URL}
-
+kubectl create secret generic api-keys --from-literal=OPENAI_API_KEY="${OPENAI_API_KEY}"  --from-literal=API_NINJAS_API_KEY="${API_NINJAS_API_KEY}"  --from-literal=SLACK_WEB_HOOK_URL="${SLACK_WEB_HOOK_URL}"
 
 # Helm general
 helm repo add bitnami https://charts.bitnami.com/bitnami
