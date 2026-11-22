@@ -10,10 +10,7 @@ spec:
     matchLabels:
       app: prometheus
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+    type: Recreate
   template:
     metadata:
       labels:
@@ -23,6 +20,11 @@ spec:
       - name: prometheus
         image: prom/prometheus:v3.13.1
         imagePullPolicy: IfNotPresent
+        args:
+          - --config.file=/etc/prometheus/prometheus.yml
+          - --storage.tsdb.path=/prometheus
+          - --storage.tsdb.retention.time=30d
+          - --storage.tsdb.retention.size=1500GB # below PVC size with some room
         resources:
           requests:
             memory: "128Mi"
@@ -41,35 +43,52 @@ spec:
         - containerPort: 9090
         readinessProbe:
           httpGet:
-            path: /
+            path: /-/ready
             port: 9090
           initialDelaySeconds: 30
-          periodSeconds: 2
+          periodSeconds: 10
         livenessProbe:
           httpGet:
-            path: /
+            path: /-/healthy
             port: 9090
           initialDelaySeconds: 30
-          periodSeconds: 2
+          periodSeconds: 10
         volumeMounts:
           - name: etc-prometheus
             mountPath: /etc/prometheus
             readOnly: true
+          - name: prometheus-data
+            mountPath: /prometheus
       volumes:
         - name: etc-prometheus
           projected:
             sources:
               - configMap:
-                  name: prometheus-config   # k8s/prometheus/prometheus.yml -> /etc/prometheus/
+                  name: prometheus-config   # config/prometheus/prometheus.yml -> /etc/prometheus/
               - configMap:
-                  name: prometheus-rules    # docker/prometheus/rules/* -> /etc/prometheus/rules/
+                  name: prometheus-rules    # config/prometheus/rules/* -> /etc/prometheus/rules/
                   items:
-                    - key: prometheus.yml
-                      path: rules/prometheus.yml
+                    - key: instance.yml
+                      path: rules/instance.yml
                     - key: jvm.yml
                       path: rules/jvm.yml
                     - key: http.yml
                       path: rules/http.yml
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
 
 ---
 apiVersion: v1

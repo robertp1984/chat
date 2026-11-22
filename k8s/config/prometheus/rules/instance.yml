@@ -1,5 +1,5 @@
 groups:
-  - name: prometheus
+  - name: instance
     labels:
       team: chat
     rules:
@@ -10,3 +10,4 @@ groups:
           severity: critical
         annotations:
           summary: "Instance {{ $labels.instance }} is down"
+          description: "Instance {{ $labels.instance }} is down"

@@ -21,8 +21,8 @@ spec:
     spec:
       containers:
         - name: alertmanager
-          image: robertp22/alertmanager:0.34.2
-          imagePullPolicy: Always
+          image: robertp22/alertmanager:0.35.0
+          imagePullPolicy: Always # Ensure it is always up-to-date
           resources:
             requests:
               memory: "128Mi"
@@ -43,20 +43,20 @@ spec:
             - name: SLACK_WEB_HOOK_URL
               valueFrom:
                 secretKeyRef:
-                  name: slack-web-hook-url
+                  name: api-keys
                   key: SLACK_WEB_HOOK_URL
           readinessProbe:
             httpGet:
-              path: /
+              path: /-/ready
               port: 9093
             initialDelaySeconds: 30
-            periodSeconds: 2
+            periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /
+              path: /-/healthy
               port: 9093
             initialDelaySeconds: 30
-            periodSeconds: 2
+            periodSeconds: 10
           volumeMounts:
             - name: alertmanager-config
               mountPath: /etc/alertmanager/alertmanager.yml.tpl
