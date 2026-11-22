@@ -21,8 +21,8 @@ spec:
     spec:
       containers:
         - name: alertmanager
-          image: robertp22/alertmanager:0.34.2
-          imagePullPolicy: Always
+          image: robertp22/alertmanager:0.35.0
+          imagePullPolicy: Always # Ensure it is always up-to-date
           resources:
             requests:
               memory: "128Mi"
